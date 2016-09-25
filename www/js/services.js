@@ -1,17 +1,17 @@
 angular.module('stocker.services', [])
 
-.factory('encodeURIService', function(){
-  return {
-    encode: function(string) {
-      console.log(string);
-      return encodeURIComponent(string).replace(/\"/g, "%22").replace(/\ /g, "%20").replace(/[!'()]/g, escape);
-    }
-  };
-})
+  .factory('encodeURIService', function() {
+    return {
+      encode: function(string) {
+        console.log(string);
+        return encodeURIComponent(string).replace(/\"/g, "%22").replace(/\ /g, "%20").replace(/[!'()]/g, escape);
+      }
+    };
+  })
 
-.factory('dateService', function($filter) {
-  
-  var currentDate = function() {
+  .factory('dateService', function($filter) {
+
+    var currentDate = function() {
     var d = new Date();
     var date = $filter('date')(d, 'yyyy-MM-dd');
     return date;
@@ -30,15 +30,12 @@ angular.module('stocker.services', [])
 
 })
 
-.factory('stockDataService', function($q, $http, encodeURIService) {
-
-  var getDetailsData = function(ticker) {
-
+  .factory('stockDataService', function($q, $http, encodeURIService) {
+    
+    var getDetailsData = function(ticker) {
     var deferred = $q.defer();
     var query = 'select * from yahoo.finance.quotes where symbol IN ("' + ticker + '")';
     var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIService.encode(query) + '&format=json&env=http://datatables.org/alltables.env'
-
-    console.log(url);
 
     $http.get(url)
       .success(function(json) {
@@ -50,8 +47,8 @@ angular.module('stocker.services', [])
         deferred.reject();
       });
 
-    return deferred.promise;
-  };
+      return deferred.promise;
+    };
 
   var getPriceData = function (ticker) {
   
@@ -70,7 +67,7 @@ angular.module('stocker.services', [])
 
     return deferred.promise;
 
-   };
+  };
 
   return {
     getPriceData: getPriceData,
@@ -79,12 +76,9 @@ angular.module('stocker.services', [])
 
 })
 
-.factory('chartDataService', function($q, $http, encodeURIService, chartDataCacheService) {
+  .factory('chartDataService', function($q, $http, encodeURIService, chartDataCacheService) {
 
-  var getHistoricalData = function(ticker, fromDate, todayDate) {
-
-    // select * from yahoo.finance.historicaldata where symbol = "YHOO" and startDate = "2009-09-11" and endDate = "2010-03-10"
-
+    var getHistoricalData = function(ticker, fromDate, todayDate) {
 
     var deferred = $q.defer();
     var query = 'select * from yahoo.finance.historicaldata where symbol = "' + ticker + '" and startDate = "' + fromDate + '" and endDate = "' + todayDate + '"';
@@ -92,28 +86,22 @@ angular.module('stocker.services', [])
     var chacheKey = ticker; 
     var chartDataCache = chartDataCacheService.get(chacheKey);
 
-    if(chartDataCache)
-    {
+    if(chartDataCache)  {
       deferred.resolve(chartDataCache);
     }
 
-    else
-    {
+    else  {
       $http.get(url)
       .success(function(json) {
-        console.log("quote is",json);
         var jsonData = json.query.results.quote;
-
         var priceData = [];
         var volumeData = [];
 
         jsonData.forEach(function(dayDataObject) {
-
           var dateToMillis = dayDataObject.Date;
           var date =  Date.parse(dateToMillis);
           var price = parseFloat(Math.round(dayDataObject.Close * 100)/ 100).toFixed(3);
           var volume = dayDataObject.Volume;
-
           var volumeDatum = '[' + date + ', ' + volume + ']';
           var priceDatum = '[' + date + ', ' + price + ']';
 
@@ -133,19 +121,14 @@ angular.module('stocker.services', [])
           '"values":' + '[' + priceData + ']' +
         '}]';
 
-        console.log(formattedChartData);
-
         deferred.resolve(formattedChartData);
         chartDataCacheService.put(chacheKey,formattedChartData);
       })
       .error(function(error) {
-        console.log("Chart data error: " + error);
         deferred.reject();
       });
 
     }
-
-    
     return deferred.promise;
   };
 
@@ -155,29 +138,28 @@ angular.module('stocker.services', [])
 })
 
 
-    .factory('customService', function ($ionicLoading, $ionicPopup, $q) {
+  .factory('customService', function ($ionicLoading, $ionicPopup, $q) {
+     var _on = function () {
+      $ionicLoading.show({
+      content: 'android',
+      animation: 'fade-in',
+      showBackdrop: true,
+      maxWidth: 200,
+      showDelay: 0
+      });
+        
+    }
 
-        var _on = function () {
-            $ionicLoading.show({
-                content: 'android',
-                // template: '<ion-spinner icon="android"></ion-spinner>',
-                animation: 'fade-in',
-                showBackdrop: true,
-                maxWidth: 200,
-                showDelay: 0
-            });
-        }
+    var _off = function () {
+      $ionicLoading.hide();
+    }
 
-        var _off = function () {
-            $ionicLoading.hide();
-        }
-
-        return {
-            _on: _on,
-            _off: _off
-        }
-
-    })
+    return {
+        _on: _on,
+        _off: _off
+    }
+   
+ })
 
 .factory('chartDataCacheService', ['CacheFactory', function(CacheFactory){
  
