@@ -194,6 +194,37 @@ angular.module('stocker.controllers', [])
     });
   }
 
+  vm.openNote = function(noteObj) {
+      // $scope.note = {title:title, description:description, ticker:vm.selectedStock ,date: vm.todayDate};
+
+      var note = $ionicPopup.show({
+        template: noteObj.description,
+        title: '' ,
+        subTitle:noteObj.ticker,
+        scope: $scope,
+        buttons: [
+          { 
+            text: 'Cancel' ,
+            onTap: function()
+            {
+              $ionicPopup.close();
+            } 
+          },
+          { 
+            text: 'Delete',
+            type: 'button-assertive',
+            onTap : function() {
+              console.log("why deleting");
+            }
+          }
+        ]
+    });
+
+    note.then(function(res) {
+      vm.stockNotes = notesService.getNotes(vm.selectedStock);
+    });
+  }
+
 
   }
 ]);
