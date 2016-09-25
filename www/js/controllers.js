@@ -1,10 +1,12 @@
 
 angular.module('stocker.controllers', [])
 
-  .controller('MainCtrl', function($scope, $ionicModal, $timeout) {
+  .controller('MainCtrl', function($scope, $ionicModal, $timeout, modalService) {
 
     var vm= this;
     vm.loginData = {};
+
+    $scope.modalService = modalService;
 
     $ionicModal.fromTemplateUrl('templates/login.html', {
       scope: $scope
@@ -241,4 +243,31 @@ angular.module('stocker.controllers', [])
   }
 
 
-}]);
+}])
+
+.controller('SearchCtrl', ['$scope', '$state', 'modalService', 'searchService',
+  function($scope, $state, modalService, searchService) {
+
+    $scope.closeModal = function() {
+      modalService.closeModal();
+    };
+
+    $scope.search = function() {
+      $scope.searchResults = '';
+      startSearch($scope.searchQuery);
+    }
+
+    var startSearch = ionic.debounce(function(query) {
+      searchService.search(query)
+        .then(function(data) {
+          $scope.searchResults = data;
+          console.log("stats",data);
+        });
+    }, 750);
+
+    $scope.goToStock = function(ticker) {
+      modalService.closeModal();
+      $state.go('app.stock', {selectedStock: ticker});
+    };
+  }
+])

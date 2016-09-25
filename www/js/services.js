@@ -353,3 +353,76 @@ angular.module('stocker.services', [])
     }
   }
 })
+.service('modalService', function($ionicModal) {
+
+  this.openModal = function(id) {
+
+    var _this = this;
+
+    if (id == 1) {
+      $ionicModal.fromTemplateUrl('templates/search.html', {
+        scope: null,
+        controller: 'SearchCtrl' 
+      }).then(function(modal) {
+        _this.modal = modal;
+        _this.modal.show();
+      });
+    } else if (id == 2) {
+      $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: null,
+        controller: 'LoginSearchCtrl'
+      }).then(function(modal) {
+        _this.modal = modal;
+        _this.modal.show();
+      });
+    } else if (id = 3) {
+      $ionicModal.fromTemplateUrl('templates/signup.html', {
+        scope: null,
+        controller: 'LoginSearchCtrl'
+      }).then(function(modal) {
+        _this.modal = modal;
+        _this.modal.show();
+      });
+    }
+  }
+
+  this.closeModal = function() {
+    
+    var _this = this;
+
+    if(!_this.modal) return;
+    _this.modal.hide();
+    _this.modal.remove();
+  };
+
+})
+
+
+.factory('searchService', function($q, $http) {
+
+  return {
+
+    search: function(query) {
+      
+      var deferred = $q.defer()
+      
+      var url = 'https://s.yimg.com/aq/autoc?query=' + query + '&region=CA&lang=en-CA&callback=YAHOO.util.ScriptNodeDataSource.callbacks'
+
+      YAHOO = window.YAHOO = {
+        util: {
+          ScriptNodeDataSource: {}
+        }
+      };
+
+      YAHOO.util.ScriptNodeDataSource.callbacks = function(data) {
+        var jsonData = data.ResultSet.Result;
+        deferred.resolve(jsonData);
+      };
+
+      $http.jsonp(url)
+        .then(YAHOO.util.ScriptNodeDataSource.callbacks);
+
+      return deferred.promise;
+    }
+  }
+})
