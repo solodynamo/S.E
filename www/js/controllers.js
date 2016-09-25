@@ -1,40 +1,30 @@
-console.log("hellloo");
 
 angular.module('stocker.controllers', [])
 
-.controller('MainCtrl', function($scope, $ionicModal, $timeout) {
+  .controller('MainCtrl', function($scope, $ionicModal, $timeout) {
 
-  var vm= this;
+    var vm= this;
+    vm.loginData = {};
 
-  // Form data for the login modal
-  vm.loginData = {};
+    $ionicModal.fromTemplateUrl('templates/login.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
 
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+    vm.closeLogin = function() {
+      $scope.modal.hide();
+    };
 
-  // Triggered in the login modal to close it
-  vm.closeLogin = function() {
-    $scope.modal.hide();
-  };
+    vm.login = function() {
+      $scope.modal.show();
+    };
 
-  // Open the login modal
-  vm.login = function() {
-    $scope.modal.show();
-  };
+    vm.doLogin = function() {
 
-  // Perform the login action when the user submits the login form
-  vm.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
+    }
 
-
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
+  
 })
 
 .controller('MyStocksCtrl', ['$scope',
@@ -58,8 +48,8 @@ angular.module('stocker.controllers', [])
   }
 ])
 
-.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService','customService','dateService','$window','chartDataService',
-  function($scope, $stateParams, stockDataService,customService,dateService,$window,chartDataService) {
+.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService','customService','dateService','$window','chartDataService','$ionicPopup',
+  function($scope, $stateParams, stockDataService, customService, dateService, $window, chartDataService, $ionicPopup) {
     var vm= this;
     vm.selectedStock = $stateParams.selectedStock;
     // vm.typesOfCharts=[{chartType:'daily'},{chartType:'weekly'},{chartType:'threeMonths'},{chartType:'yearly'},{chartType:'max'}];
@@ -173,6 +163,36 @@ angular.module('stocker.controllers', [])
       y1AxisLabel:'Price',
       y3AxisLabel:'Volume'
     };
+
+     vm.addNote = function() {
+      $scope.note = {};
+
+      var note = $ionicPopup.show({
+        template: '<input type="password" ng-model="data.wifi">',
+        title: 'Enter Wi-Fi Password',
+        subTitle: 'Please use normal things',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          {
+            text: '<b>Save</b>',
+            type: 'button-positive',
+            onTap: function(e) {
+            if (!$scope.data.wifi) {
+              e.preventDefault();
+            } else {
+              return $scope.data.wifi;
+            }
+          }
+        }
+      ]
+    });
+
+    note.then(function(res) {
+      console.log('Tapped!', res);
+    });
+  }
+
 
   }
 ]);
