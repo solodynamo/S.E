@@ -1,5 +1,7 @@
 angular.module('stocker.services', [])
 
+  .constant('FIREBASE_URL', 'https://stocker-668d3.firebaseio.com/');
+
   .factory('encodeURIService', function() {
     return {
       encode: function(string) {
