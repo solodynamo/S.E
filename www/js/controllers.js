@@ -194,7 +194,7 @@ angular.module('stocker.controllers', [])
     });
   }
 
-  vm.openNote = function(noteObj) {
+  vm.openNote = function(index, noteObj) {
       // $scope.note = {title:title, description:description, ticker:vm.selectedStock ,date: vm.todayDate};
 
       var note = $ionicPopup.show({
@@ -214,7 +214,7 @@ angular.module('stocker.controllers', [])
             text: 'Delete',
             type: 'button-assertive',
             onTap : function() {
-              console.log("why deleting");
+              notesService.deleteNote(noteObj.ticker,index);
             }
           }
         ]
