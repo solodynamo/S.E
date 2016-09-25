@@ -27,23 +27,11 @@ angular.module('stocker.controllers', [])
   
 })
 
-.controller('MyStocksCtrl', ['$scope',
-  function($scope) {
+.controller('MyStocksCtrl', ['$scope', 'myStocksArrayService',
+  function($scope, myStocksArrayService) {
     var vm= this;
-    vm.myStocksArray = [
-      { selectedStock: "AAPL" },
-      { selectedStock: "GPRO" },
-      { selectedStock: "FB" },
-      { selectedStock: "NFLX" },
-      { selectedStock: "TSLA" },
-      { selectedStock: "BRK-A" },
-      { selectedStock: "INTC" },
-      { selectedStock: "MSFT" },
-      { selectedStock: "GE" },
-      { selectedStock: "BAC" },
-      { selectedStock: "C" },
-      { selectedStock: "T" }
-    ];
+    console.log(myStocksArrayService);
+    vm.myStocksArray = myStocksArrayService;
 
   }
 ])
@@ -235,6 +223,10 @@ angular.module('stocker.controllers', [])
       vm.newsStories = data;
       console.log(vm.newsStories);
     })
+  }
+
+  vm.openNews = function(link) {
+    console.log(link);
   }
 
 

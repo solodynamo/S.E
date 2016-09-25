@@ -116,7 +116,7 @@
 
 	<div class="card">
 		<div class="item item-divider">News</div>
-		<a  class="item item-icon-right " ng-repeat = "news in vm.newsStories">
+		<a  class="item item-icon-right " ng-repeat = "news in vm.newsStories" ng-click = "vm.openNews(news.link)" >
 		<h2>{{news.title}}</h2>
 		<h3>{{news.pubDate}}</h3>
 		<h6>{{news.description}}</h6> 

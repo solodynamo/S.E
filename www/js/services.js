@@ -255,3 +255,63 @@ angular.module('stocker.services', [])
     }
   }
 })
+
+
+.factory('fillMyStocksCacheService', function(CacheFactory){
+  
+  var myStocksCache;
+
+  if(!CacheFactory.get('myStocksCache')) {
+    myStocksCache = CacheFactory('myStocksCache', {
+      storageMode: 'localStorage'
+    });
+  } else {
+    myStocksCache = CacheFactory.get('myStocksCache');
+  }
+//it will fill the page with default stocks but after that user will control it 
+  var fillMyStocksCache = function() {
+
+    var myStocksArray = [
+      { selectedStock: "AAPL" },
+      { selectedStock: "GPRO" },
+      { selectedStock: "FB" },
+      { selectedStock: "NFLX" },
+      { selectedStock: "TSLA" },
+      { selectedStock: "BRK-A" },
+      { selectedStock: "INTC" },
+      { selectedStock: "MSFT" },
+      { selectedStock: "GE" },
+      { selectedStock: "BAC" },
+      { selectedStock: "C" },
+      { selectedStock: "T" }
+    ];
+
+    myStocksCache.put('myStocks', myStocksArray);
+  };
+
+  return {
+    fillMyStocksCache: fillMyStocksCache
+  };
+
+})
+
+
+.factory('myStocksCacheService', function(CacheFactory) {
+
+  var myStocksCache = CacheFactory.get('myStocksCache');
+
+  return myStocksCache;
+})
+
+
+.factory('myStocksArrayService', function(fillMyStocksCacheService, myStocksCacheService) {
+
+  if(!myStocksCacheService.info('myStocks')) {
+    fillMyStocksCacheService.fillMyStocksCache();
+  }
+
+  var myStocks = myStocksCacheService.get('myStocks');
+
+  return myStocks;
+
+})
