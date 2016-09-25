@@ -47,6 +47,16 @@ angular.module('stocker.controllers', [])
     vm.stockNotes = [];
     vm.following = followStockService.checkFollowing(vm.selectedStock);
 
+    vm.toggleFollow = function() {
+      if(vm.following) {
+        followStockService.unfollow(vm.selectedStock);
+        vm.following = false;
+      } else{
+        followStockService.follow(vm.selectedStock);
+        vm.following = true;
+      }
+    }
+
      $scope.chartView = 4;
   
      vm.chartViewFunc = function(n) {

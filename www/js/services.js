@@ -322,7 +322,7 @@ angular.module('stocker.services', [])
 
     follow: function(ticker) {
 
-      var stockToAdd = {"ticker": ticker};
+      var stockToAdd = {"selectedStock": ticker};
 
       myStocksArrayService.push(stockToAdd);
       myStocksCacheService.put('myStocks', myStocksArrayService);
@@ -331,7 +331,7 @@ angular.module('stocker.services', [])
     unfollow: function(ticker) {
 
       for(var i = 0; i < myStocksArrayService.length; i++) {
-        if(myStocksArrayService[i].ticker == ticker) {
+        if(myStocksArrayService[i].selectedStock == ticker) {
           myStocksArrayService.splice(i, 1);
           myStocksCacheService.remove('myStocks');
           myStocksCacheService.put('myStocks', myStocksArrayService);
