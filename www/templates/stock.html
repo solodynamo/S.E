@@ -108,8 +108,9 @@
 
 	<div class="card" >
 	<div class="item item-divider">Notes <span ng-click="vm.addNote()">add</span></div>
-
-	<a class="item" ><h3>Notes title</h3></a>
+	<a class="item" ng-repeat="note in vm.stockNotes ">
+	<h3><span>{{note.title}}</span></h3><span>Added On :{{note.date|date:'d/M/yy'}}</span>
+	</a>
 	</div>
 
 	<div class="card">

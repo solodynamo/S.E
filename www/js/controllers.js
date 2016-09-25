@@ -48,13 +48,16 @@ angular.module('stocker.controllers', [])
   }
 ])
 
-.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService','customService','dateService','$window','chartDataService','$ionicPopup',
-  function($scope, $stateParams, stockDataService, customService, dateService, $window, chartDataService, $ionicPopup) {
+.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService', 'customService', 'dateService', '$window', 'chartDataService', '$ionicPopup', 'notesService' ,
+
+  function($scope, $stateParams, stockDataService, customService, dateService, $window, chartDataService, $ionicPopup ,notesService) {
+
     var vm= this;
     vm.selectedStock = $stateParams.selectedStock;
     // vm.typesOfCharts=[{chartType:'daily'},{chartType:'weekly'},{chartType:'threeMonths'},{chartType:'yearly'},{chartType:'max'}];
     vm.todayDate=dateService.currentDate();
     vm.oneYearAgoDate=dateService.oneYearAgoDate();
+    vm.stockNotes = [];
 
      $scope.chartView = 4;
   
@@ -71,6 +74,8 @@ angular.module('stocker.controllers', [])
       getPriceData();
       getDetailsData();
       getChartData();
+      vm.stockNotes = notesService.getNotes(vm.selectedStock);
+      console.log("notes ",vm.stockNotes);
     });
 
     function getPriceData() {
@@ -164,13 +169,13 @@ angular.module('stocker.controllers', [])
       y3AxisLabel:'Volume'
     };
 
-     vm.addNote = function() {
-      $scope.note = {};
+    vm.addNote = function() {
+      $scope.note = {title:"note", description:"type it pal....!", ticker:vm.selectedStock ,date: vm.todayDate};
 
       var note = $ionicPopup.show({
-        template: '<input type="password" ng-model="data.wifi">',
-        title: 'Enter Wi-Fi Password',
-        subTitle: 'Please use normal things',
+        template: '<textarea type="text" ng-model="note.description"></textarea>',
+        title: '' ,
+        subTitle:vm.selectedStock,
         scope: $scope,
         buttons: [
           { text: 'Cancel' },
@@ -178,18 +183,14 @@ angular.module('stocker.controllers', [])
             text: '<b>Save</b>',
             type: 'button-positive',
             onTap: function(e) {
-            if (!$scope.data.wifi) {
-              e.preventDefault();
-            } else {
-              return $scope.data.wifi;
+              notesService.addNote(vm.selectedStock, $scope.note);
             }
           }
-        }
-      ]
+        ]
     });
 
     note.then(function(res) {
-      console.log('Tapped!', res);
+      vm.stockNotes = notesService.getNotes(vm.selectedStock);
     });
   }
 
