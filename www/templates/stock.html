@@ -1,4 +1,9 @@
 <ion-view view-title="{{vm.selectedStock}}">
+
+<ion-nav-buttons side="right">
+	<button class="button icon-left" ng-class="vm.following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="vm.following ? 'Following' : 'Follow'" ng-click="toggleFollow()"></button>
+</ion-nav-buttons>
+
 <div class="bar bar-subheader bar-calm">
 	<div class="buttons" side="left">
 	<div class="button button-clear" class="item-text-wrap">

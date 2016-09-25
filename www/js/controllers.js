@@ -36,15 +36,16 @@ angular.module('stocker.controllers', [])
   }
 ])
 
-.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService', 'customService', 'dateService', '$window', 'chartDataService', '$ionicPopup', 'notesService' , 'newsService',
+.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService', 'customService', 'dateService', '$window', 'chartDataService', '$ionicPopup', 'notesService' , 'newsService', 'followStockService',
 
-  function($scope, $stateParams, stockDataService, customService, dateService, $window, chartDataService, $ionicPopup ,notesService, newsService) {
+  function($scope, $stateParams, stockDataService, customService, dateService, $window, chartDataService, $ionicPopup ,notesService, newsService, followStockService) {
 
     var vm= this;
     vm.selectedStock = $stateParams.selectedStock;
     vm.todayDate=dateService.currentDate();
     vm.oneYearAgoDate=dateService.oneYearAgoDate();
     vm.stockNotes = [];
+    vm.following = followStockService.checkFollowing(vm.selectedStock);
 
      $scope.chartView = 4;
   
