@@ -79,16 +79,27 @@ angular.module('stocker.services', [])
 
 })
 
-.factory('chartDataService', function($q, $http, encodeURIService) {
+.factory('chartDataService', function($q, $http, encodeURIService, chartDataCacheService) {
+
   var getHistoricalData = function(ticker, fromDate, todayDate) {
 
     // select * from yahoo.finance.historicaldata where symbol = "YHOO" and startDate = "2009-09-11" and endDate = "2010-03-10"
 
+
     var deferred = $q.defer();
     var query = 'select * from yahoo.finance.historicaldata where symbol = "' + ticker + '" and startDate = "' + fromDate + '" and endDate = "' + todayDate + '"';
     var url = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIService.encode(query) + '&format=json&env=http://datatables.org/alltables.env';
+    var chacheKey = ticker; 
+    var chartDataCache = chartDataCacheService.get(chacheKey);
 
-    $http.get(url)
+    if(chartDataCache)
+    {
+      deferred.resolve(chartDataCache);
+    }
+
+    else
+    {
+      $http.get(url)
       .success(function(json) {
         console.log("quote is",json);
         var jsonData = json.query.results.quote;
@@ -125,12 +136,16 @@ angular.module('stocker.services', [])
         console.log(formattedChartData);
 
         deferred.resolve(formattedChartData);
+        chartDataCacheService.put(chacheKey,formattedChartData);
       })
       .error(function(error) {
         console.log("Chart data error: " + error);
         deferred.reject();
       });
 
+    }
+
+    
     return deferred.promise;
   };
 
@@ -218,14 +233,13 @@ angular.module('stocker.services', [])
  
  var chartDataCache;
 
- if(!CacheFactory.get('chartDataCache')){
+  if(!CacheFactory.get('chartDataCache')) {
  
- chartDataCache=CacheFactory('chartDataCache',{
-maxAge:60*60*8*1000,
-deleteOnExpire:'aggresive',
-storageMode:'localStorage'
-
- })
+    chartDataCache=CacheFactory('chartDataCache',{
+    maxAge:60*60*8*1000,
+    deleteOnExpire:'aggressive',
+    storageMode:'localStorage'
+  })
 
  } else {
 
