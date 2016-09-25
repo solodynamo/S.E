@@ -110,13 +110,16 @@
 	<div class="item item-divider">Notes <span ng-click="vm.addNote()">add</span></div>
 	<a class="item" ng-repeat="note in vm.stockNotes " ng-click="vm.openNote($index,note)">
 	<h3><span>{{note.title}}</span></h3><span>Added On :{{note.date|date:'d/M/yy'}}</span>
+	<i class="icon ion-ios-arrow-right"></i>
 	</a>
 	</div>
 
 	<div class="card">
 		<div class="item item-divider">News</div>
-		<a  class="item item-icon-right ">
-		<h3>News Story Title</h3>
+		<a  class="item item-icon-right " ng-repeat = "news in vm.newsStories">
+		<h2>{{news.title}}</h2>
+		<h3>{{news.pubDate}}</h3>
+		<h6>{{news.description}}</h6> 
 		<i class="icon ion-ios-arrow-right"></i>
 		</a>
 	</div>

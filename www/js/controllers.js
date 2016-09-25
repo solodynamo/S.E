@@ -48,13 +48,12 @@ angular.module('stocker.controllers', [])
   }
 ])
 
-.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService', 'customService', 'dateService', '$window', 'chartDataService', '$ionicPopup', 'notesService' ,
+.controller('StockCtrl', ['$scope', '$stateParams', 'stockDataService', 'customService', 'dateService', '$window', 'chartDataService', '$ionicPopup', 'notesService' , 'newsService',
 
-  function($scope, $stateParams, stockDataService, customService, dateService, $window, chartDataService, $ionicPopup ,notesService) {
+  function($scope, $stateParams, stockDataService, customService, dateService, $window, chartDataService, $ionicPopup ,notesService, newsService) {
 
     var vm= this;
     vm.selectedStock = $stateParams.selectedStock;
-    // vm.typesOfCharts=[{chartType:'daily'},{chartType:'weekly'},{chartType:'threeMonths'},{chartType:'yearly'},{chartType:'max'}];
     vm.todayDate=dateService.currentDate();
     vm.oneYearAgoDate=dateService.oneYearAgoDate();
     vm.stockNotes = [];
@@ -75,7 +74,8 @@ angular.module('stocker.controllers', [])
       getDetailsData();
       getChartData();
       vm.stockNotes = notesService.getNotes(vm.selectedStock);
-      console.log("notes ",vm.stockNotes);
+      getNews();
+      
     });
 
     function getPriceData() {
@@ -225,6 +225,17 @@ angular.module('stocker.controllers', [])
     });
   }
 
+  function getNews() {
 
+    vm.newsStories = [];
+
+    var promise = newsService.getNews(vm.selectedStock);
+
+    promise.then(function(data) {
+      vm.newsStories = data;
+      console.log(vm.newsStories);
+    })
   }
-]);
+
+
+}]);

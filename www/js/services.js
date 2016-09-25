@@ -227,3 +227,31 @@ angular.module('stocker.services', [])
     }
   }
 })
+
+.factory('newsService', function($q, $http) {
+
+  return {
+
+    getNews: function(ticker) {
+
+      var deferred = $q.defer();
+      var x2js = new X2JS();
+      var url = 'http://finance.yahoo.com/rss/headline?s=' + ticker;
+
+      $http.get(url)
+        .success(function(xml) {
+          var xmlDoc = x2js.parseXmlString(xml);
+          var json = x2js.xml2json(xmlDoc);
+          var jsonData = json.rss.channel.item;
+          deferred.resolve(jsonData);
+        })
+        .error(function(error) {
+          deferred.reject();
+          console.log('News error: ' + error);
+        });
+
+      return deferred.promise;
+
+    }
+  }
+})
