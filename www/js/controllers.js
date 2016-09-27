@@ -271,23 +271,69 @@ angular.module('stocker.controllers', [])
     };
   }
 ])
-.controller('LoginSignupCtrl', ['$scope', 'modalService', 'userService',
-  function($scope, modalService, userService) {
+.controller('loginSignupCtrl', ['$scope', 'modalService', 'Utils', 'Popup', '$ionicModal',
+  function($scope, modalService, Utils, Popup, $ionicModal) {
 
-    $scope.user = {email: '', password: ''};
+     $scope.login = function(user) {
+    if (angular.isDefined(user)) {
+      Utils.show();
+      loginWithFirebase(user.email, user.password);
+    }
+  };
 
-    $scope.closeModal = function() {
-      modalService.closeModal();
-    };
-
-    $scope.signup = function(user) {
-      userService.signup(user);
-    };
-
-    $scope.login = function(user) {
-      userService.login(user);
-    };
+  $scope.closeModal= function()
+  {
+    modalService.closeModal();
   }
-])
 
-;
+var loginWithFirebase = function(email, password) {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(function(response) {
+        //Retrieve the account from the Firebase Database
+        var userId = firebase.auth().currentUser.uid;
+        firebase.database().ref('accounts').orderByChild('userId').equalTo(userId).once('value').then(function(accounts) {
+          if (accounts.exists()) {
+            accounts.forEach(function(account) {
+              //Account already exists, proceed to home.
+              Utils.hide();
+              firebase.database().ref('accounts/' + account.key).on('value', function(response) {
+                var account = response.val();
+                $localStorage.account = account;
+              });
+              $state.go('app.myStocks');
+            });
+          }
+        });
+        $localStorage.loginProvider = "Firebase";
+        $localStorage.email = email;
+        $localStorage.password = password;
+      })
+      .catch(function(error) {
+        var errorCode = error.code;
+        showFirebaseLoginError(errorCode);
+      });
+  }
+
+  var showFirebaseLoginError = function(errorCode) {
+    switch (errorCode) {
+      case 'auth/user-not-found':
+        Utils.message(Popup.errorIcon, Popup.emailNotFound);
+        break;
+      case 'auth/wrong-password':
+        Utils.message(Popup.errorIcon, Popup.wrongPassword);
+        break;
+      case 'auth/user-disabled':
+        Utils.message(Popup.errorIcon, Popup.accountDisabled);
+        break;
+      case 'auth/too-many-requests':
+        Utils.message(Popup.errorIcon, Popup.manyRequests);
+        break;
+      default:
+        Utils.message(Popup.errorIcon, Popup.errorLogin);
+        break;
+    }
+  };
+
+
+ 
+  }])

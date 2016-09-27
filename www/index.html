@@ -15,14 +15,24 @@
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
-    <script src="lib/firebase/firebase.js"></script>
-    <script src="lib/angularfire/dist/angularfire.min.js"></script>
     <script src="lib/d3/d3.min.js"></script>
     <script src="lib/nvd3/nv.d3.js"></script>
     <script src="lib/angular-nvd3/dist/angular-nvd3.min.js"></script>
     <script src="lib/nv-chart/nv-chart.min.js"></script>
     <script src="lib/angular-x2js/dist/x2js.min.js"></script>
     <script src="lib/x2js/xml2json.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.2.0/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyB4og649VLOfYXIt_zK_SBgVuGskV92lt8",
+        authDomain: "stocker-668d3.firebaseapp.com",
+        databaseURL: "https://stocker-668d3.firebaseio.com",
+        storageBucket: "stocker-668d3.appspot.com",
+        messagingSenderId: "910001279386"
+    };
+    firebase.initializeApp(config);
+  </script>
 
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
@@ -45,6 +55,7 @@
     <script src="lib/angular-cache/dist/angular-cache.min.js"></script>
     <script src="lib/angular-nvd3/dist/angular-nvd3.min.js"></script>
     <script src="lib/nv-chart/nv-chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.6/ngStorage.min.js"></script>
 
 
   </head>

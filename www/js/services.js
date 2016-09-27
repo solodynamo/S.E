@@ -1,6 +1,6 @@
 angular.module('stocker.services', [])
 
-  .constant('FIREBASE_URL', 'https://stocker-668d3.firebaseio.com/');
+  .constant('FIREBASE_URL', 'https://stocker-668d3.firebaseio.com/')
 
   .factory('encodeURIService', function() {
     return {
@@ -428,3 +428,163 @@ angular.module('stocker.services', [])
     }
   }
 })
+
+.factory('userService', function($window, $timeout, firebaseRef, modalService, $rootScope, firebaseUserRef, myStocksArrayService, myStocksCacheService, notesCacheService) {
+
+  var login = function(user, signup) {
+    firebaseRef.authWithPassword({
+      email: user.email,
+      password: user.password
+    }, function(error, authData) {
+      if (error) {
+        console.log("Login failed!", error);
+      } else {
+        $rootScope.currentUser = user;
+
+        if(signup) {
+          modalService.closeModal();
+        } else {
+          myStocksCacheService.removeAll();
+          notesCacheService.removeAll();
+
+          loadUserData(authData);
+
+          modalService.closeModal();
+          $timeout(function() {
+            $window.location.reload(true)
+          }, 400);
+        }
+
+      }
+    })
+  };
+
+  var signup = function(user) {
+
+    firebaseRef.createUser({
+      email:      user.email,
+      password:   user.password
+    }, function(error, userData) {
+      if (error) {
+        console.log("Error creating user:", error);
+      } else {
+        login(user, true);
+        firebaseRef.child('emails').push(user.email);
+        firebaseUserRef.child(userData.uid).child('stocks').set(myStocksArrayService);
+
+        var stocksWithNotes = notesCacheService.keys();
+        
+        stocksWithNotes.forEach(function(stockWithNotes) {
+          var notes = notesCacheService.get(stockWithNotes);
+
+          notes.forEach(function(note) {
+            firebaseUserRef.child(userData.uid).child('notes').child(note.ticker).push(note);
+          });
+        })
+      }
+    })
+  };
+
+  var logout = function() {
+    firebaseRef.unauth();
+    notesCacheService.removeAll();
+    myStocksCacheService.removeAll();
+    $window.location.reload(true);
+    $rootScope.currentUser = '';
+  };
+
+  var updateStocks = function(stocks) {
+    firebaseUserRef.child(getUser().uid).child('stocks').set(stocks);
+  }
+
+  var updateNotes = function(ticker, notes) {
+    firebaseUserRef.child(getUser().uid).child('notes').child(ticker).remove();
+    notes.forEach(function(note) {
+      firebaseUserRef.child(getUser().uid).child('notes').child(note.ticker).push(note);
+    });
+  }
+
+  var loadUserData = function(authData) {
+
+    firebaseUserRef.child(authData.uid).child('stocks').once('value', function(snapshot) {
+      var stocksFromDatabase = [];
+
+      snapshpt.val().forEach(function(stock) {
+        var stockToAdd = {ticker: stock.ticker};
+        stocksFromDatabase.push(stockToAdd);
+      });
+
+      myStocksCacheService.put('myStocks', stocksFromDatabase);
+    },
+    function(error) {
+      console.log("Friebase error -> stocks: ", error);
+    });
+
+    firebaseUserRef.child(authData.uid).child('notes').once('value', function(snapshot) {
+
+      snapshot.forEach(function(stockWithNotes) {
+        var notesFromDatabase = [];
+
+        stockWithNotes.forEach(function(note) {
+          notesFromDatabase.push(note.val());
+          var cacheKey = note.child('ticker').val();
+          notesCacheService.put(cacheKey, notesFromDatabase);
+        });
+      })
+    },
+    function(error) {
+      console.log("Firebase error -> notes: ", error);
+    })
+  }
+
+  var getUser = function() {
+    return firebaseRef.getAuth();
+  }
+
+  if (getUser()) {
+    $rootScope.currentUser = getUser();
+  }
+
+  return {
+    login: login,
+    signup: signup,
+    logout: logout,
+    updateStocks: updateStocks,
+    getUser: getUser,
+    updateNotes: updateNotes
+  };
+
+})
+//other person factory code 
+.factory('Utils', function($ionicLoading, $timeout, Popup) {
+  var promise;
+  var Utils = {
+    show: function() {
+      $ionicLoading.show({
+        template: '<ion-spinner icon="ripple"></ion-spinner>'
+      });
+    },
+    hide: function() {
+      $ionicLoading.hide();
+    },
+    message: function(icon, message) {
+      $ionicLoading.show({
+        template: '<div class="message-popup" onclick="hideMessage()"><h1><i class="icon ' + icon + '"></i></h1><p>' + message + '</p></div>',
+        scope: this
+      });
+      promise = $timeout(function() {
+        $ionicLoading.hide();
+      }, Popup.delay);
+      return promise;
+    }
+  };
+
+  hideMessage = function() {
+    $timeout.cancel(promise);
+    $ionicLoading.hide();
+  };
+
+  return Utils;
+});
+
+//other person factory code ends 
