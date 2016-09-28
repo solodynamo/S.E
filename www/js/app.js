@@ -106,5 +106,5 @@ angular.module('stocker', ['ionic', 'nvd3', 'angular-cache', 'nvChart', 'stocker
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/my-stocks');
+  $urlRouterProvider.otherwise('/login');
 });
