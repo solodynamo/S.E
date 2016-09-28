@@ -271,7 +271,7 @@ angular.module('stocker.controllers', [])
     };
   }
 ])
-.controller('loginCtrl', ['$scope', 'modalService', 'Utils', 'Popup', '$ionicModal', '$state', '$localStorage',
+.controller('LoginCtrl', ['$scope', 'modalService', 'Utils', 'Popup', '$ionicModal', '$state', '$localStorage',
   function($scope, modalService, Utils, Popup, $ionicModal, $state, $localStorage) {
 
      $scope.login = function(user) {

@@ -69,6 +69,13 @@ angular.module('stocker', ['ionic', 'nvd3', 'angular-cache', 'nvChart', 'stocker
    $ionicConfigProvider.backButton.text('');
   $stateProvider
 
+
+  .state("login", {
+      url: "/login",
+      templateUrl: "templates/login.html",
+      controller: "LoginCtrl"
+    })
+
     .state('app', {
     url: '/app',
     abstract: true,
