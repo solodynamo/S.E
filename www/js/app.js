@@ -76,6 +76,13 @@ angular.module('stocker', ['ionic', 'nvd3', 'angular-cache', 'nvChart', 'stocker
       controller: "LoginCtrl"
     })
 
+  .state("signUp", {
+      url: "/signUp",
+      templateUrl: "templates/signup.html",
+      controller: "SignUpCtrl"
+    })
+
+
     .state('app', {
     url: '/app',
     abstract: true,
@@ -106,5 +113,5 @@ angular.module('stocker', ['ionic', 'nvd3', 'angular-cache', 'nvChart', 'stocker
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('app/my-stocks');
 });
