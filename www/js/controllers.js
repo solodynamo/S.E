@@ -29,9 +29,10 @@ angular.module('stocker.controllers', [])
   
 })
 
-.controller('MyStocksCtrl', ['$scope', 'myStocksArrayService',
-  function($scope, myStocksArrayService) {
+.controller('MyStocksCtrl', ['$scope', 'myStocksArrayService', 'ionicMaterialInk',
+  function($scope, myStocksArrayService, ionicMaterialInk) {
     var vm= this;
+    ionicMaterialInk.displayEffect();
     console.log(myStocksArrayService);
     vm.myStocksArray = myStocksArrayService;
 

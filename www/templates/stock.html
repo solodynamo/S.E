@@ -4,7 +4,7 @@
 	<button class="button icon-left" ng-class="vm.following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="vm.following ? 'Following' : 'Follow'" ng-click="vm.toggleFollow()"></button>
 </ion-nav-buttons>
 
-<div class="bar bar-subheader bar-calm">
+<div class="bar bar-subheader">
 	<div class="buttons" side="left">
 	<div class="button button-clear" class="item-text-wrap">
 		<h6 ng-cloak>{{vm.stockDetailsData.Name}}</h6>
@@ -59,7 +59,7 @@
 	</div>
 		<div class="row row-center">
 		<div class="col">Currency:</div>
-		<div class="col">{{vm.stockDetailsData.Currency}}</div>
+		<div class="col"><i class="icon ion-social-usd-outline" style="padding-right:5px;"></i>{{vm.stockDetailsData.Currency}}</div>
 	</div>
 	<div class="row row-center">
 		<div class="col">Type:</div>
@@ -112,7 +112,7 @@
 </div>
 
 	<div class="card" >
-	<div class="item item-divider">Notes <span ng-click="vm.addNote()">add</span></div>
+	<div class="item item-divider">Notes <span class="icon ion-android-add-circle"  ng-click="vm.addNote()" style="padding-left:5px;"></span></div>
 	<a class="item" ng-repeat="note in vm.stockNotes " ng-click="vm.openNote($index,note)">
 	<h3><span>{{note.title}}</span></h3><span>Added On :{{note.date|date:'d/M/yy'}}</span>
 	<i class="icon ion-ios-arrow-right"></i>

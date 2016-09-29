@@ -1,4 +1,4 @@
-/* Chart Styles */
+ Chart Styles */
 
 #interactiveChart {
 	height: 80vmin;
@@ -98,4 +98,22 @@
 
 svg text {
 	font: 400 10pt "Helvetica Neue", sans-serif !important;
+}
+.menu .avatar {
+    top: 16px;
+    left: 16px;
+    height: 55px;
+    width: 250px;
+}
+.bar .button.button-fab.button-fab-bottom-right, .button.button-fab.button-fab-bottom-right {
+    background-color: white;
+    color: black;
+}
+/*.menu-open .bar.bar-header.expanded {
+    background-size: 0%;
+    /*background-color: white;
+    }*/
+
+.menu .bar.bar-header.expanded {
+    background-image: url(../img/material3.jpg);
 }
