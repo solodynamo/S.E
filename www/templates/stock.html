@@ -1,13 +1,13 @@
 <ion-view view-title="{{vm.stockDetailsData.Name}}">
 
-<!-- <ion-nav-buttons side="right">
+<ion-nav-buttons side="right">
 	<button class="button icon-left" ng-class="vm.following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="vm.following ? 'Following' : 'Follow'" ng-click="vm.toggleFollow()"></button>
-</ion-nav-buttons> -->
+</ion-nav-buttons>
 
 <div class="bar bar-subheader">
 	<div class="buttons" side="left">
 	<div class="button button-clear">
-		<h6 ng-cloak class="item-text-wrap" style="padding-bottom:0px;">{{vm.selectedStock}}</h6>
+		<h6 ng-cloak class="item-text-wrap">{{vm.selectedStock}}</h6>
 	</div>
 	</div>
 
@@ -44,13 +44,13 @@
       <a ng-click="vm.chartViewFunc(2)" class="button" ng-class="chartView === 2 ? 'active' : '' ">Week</a>
       <a ng-click="vm.chartViewFunc(3)" class="button" ng-class="chartView === 3 ? 'active' : '' ">3m</a>
       <a ng-click="vm.chartViewFunc(4)" class="button" ng-class="chartView === 4 ? 'active' : '' ">Year</a>
-      <a ng-click="vm.chartViewFunc(5)" class="button" ng-class="chartView === 5 ? 'active' : '' ">max</a>
+      <a ng-click="vm.chartViewFunc(5)" class="button" ng-class="chartView === 5 ? 'active' : '' ">Max</a>
     </div>
-    <img ng-if="chartView === 1" ng-src="http://chart.finance.yahoo.com/z?s={{vm.selectedStock}}&t=1d&q=l&l=on&z=m&a=vm" style="width: 100%;">
-    <img ng-if="chartView === 2" ng-src="http://chart.finance.yahoo.com/z?s={{vm.selectedStock}}&t=5d&q=l&l=on&z=m&a=vm" style="width: 100%;">
-    <img ng-if="chartView === 3" ng-src="http://chart.finance.yahoo.com/z?s={{vm.selectedStock}}&t=3m&q=l&l=on&z=m&a=vm" style=" height:70vh;">
-    <div ng-if="chartView === 4" nv-chart="chartOptions" id="interactiveChart"> </div>
-    <img ng-if="chartView === 5" ng-src="http://chart.finance.yahoo.com/z?s={{vm.selectedStock}}&t=my&q=l&l=on&z=m&a=vm" style="width: 100%;">
+    <img ng-if="chartView === 1" ng-src="http://chart.finance.yahoo.com/z?s={{vm.selectedStock}}&t=1d&q=l&l=on&z=m&a=vm" style="width: 100%;" ng-cloak>
+    <img ng-if="chartView === 2" ng-src="http://chart.finance.yahoo.com/z?s={{vm.selectedStock}}&t=5d&q=l&l=on&z=m&a=vm" style="width: 100%;" ng-cloak>
+    <img ng-if="chartView === 3" ng-src="http://chart.finance.yahoo.com/z?s={{vm.selectedStock}}&t=3m&q=l&l=on&z=m&a=vm" style=" height:70vh;" ng-cloak>
+    <div ng-if="chartView === 4" nv-chart="chartOptions" id="interactiveChart" ng-cloak> </div>
+    <img ng-if="chartView === 5" ng-src="http://chart.finance.yahoo.com/z?s={{vm.selectedStock}}&t=my&q=l&l=on&z=m&a=vm" style="width: 100%;" ng-cloak>
 
 
 <div class="card">

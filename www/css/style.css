@@ -125,3 +125,6 @@ svg text {
 .bar .button.button-fab.button-fab-bottom-right, .button.button-fab.button-fab-bottom-right {
     text-shadow: 2px 2px 3px #387ef5;
 }
+.bar-royal .button {
+    background-color: #3b65f9;
+}

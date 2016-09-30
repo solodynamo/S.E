@@ -1,5 +1,6 @@
 
-angular.module('stocker', ['ionic', 'nvd3', 'angular-cache', 'nvChart', 'stocker.controllers','stocker.services','stocker.directives','stocker.filters', 'ngStorage', 'ionic-material'])
+angular.module('stocker', 
+  ['ionic', 'nvd3', 'angular-cache','ngCordova', 'nvChart', 'stocker.controllers','stocker.services','stocker.directives','stocker.filters', 'ngStorage', 'ionic-material'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
