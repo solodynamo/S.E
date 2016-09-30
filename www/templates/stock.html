@@ -1,4 +1,4 @@
-<ion-view view-title="{{vm.selectedStock}}">
+<ion-view view-title="{{vm.stockDetailsData.Name}}">
 
 <!-- <ion-nav-buttons side="right">
 	<button class="button icon-left" ng-class="vm.following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="vm.following ? 'Following' : 'Follow'" ng-click="vm.toggleFollow()"></button>
@@ -6,8 +6,8 @@
 
 <div class="bar bar-subheader">
 	<div class="buttons" side="left">
-	<div class="button button-clear" class="item-text-wrap">
-		<h6 ng-cloak>{{vm.stockDetailsData.Name}}</h6>
+	<div class="button button-clear">
+		<h6 ng-cloak class="item-text-wrap" style="padding-bottom:0px;">{{vm.selectedStock}}</h6>
 	</div>
 	</div>
 
