@@ -1,6 +1,6 @@
 <ion-modal-view ng-controller="SearchCtrl" id="search">
 	
-	<div class="bar bar-header bar-dark item-input-inset">
+	<div class="bar bar-header bar-dark item-input-inset" style = "background-color: #3b65f9;">
 		<div class="item-input-wrapper search-input">
 			
 			<i class="ion-ios-search-strong placehloder-icon light"></i>
@@ -9,12 +9,12 @@
 				autofocus
 				ng-model-options="{ allowInvalid: true }"
 				type="text"
-				placeholder="Search stocks..."
+				placeholder="Search Stocks..."
 				ng-model="searchQuery"
 				ng-change="search()"
 				ng-class="searchQuery.length <= 4 && searchQuery.length > 0 ? 'text-uppercase' : 'text-capitalize'"
 			>
-			<i class="icon ion-close-round" ng-click="closeModal()"></i>
+			<i class="icon ion-close-round" ng-click="closeModal()" style ="color:black;"></i>
 		</div>
 	</div>
 

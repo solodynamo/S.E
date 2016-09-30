@@ -117,3 +117,8 @@ svg text {
 .menu .bar.bar-header.expanded {
     background-image: url(../img/material3.jpg);
 }
+.bar.bar-royal {
+    /*background-color: #75D701;*/
+    background-color: #3b65f9;
+  
+}
