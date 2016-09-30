@@ -128,3 +128,13 @@ svg text {
 .bar-royal .button {
     background-color: #3b65f9;
 }
+#followButton {
+    padding-left: 3px;
+    margin-left: 20px;
+    padding-right: 90px;
+}
+#noteButton {
+    margin-left: 150px;
+    background-color: #99f19e;
+    color: #444;
+}

@@ -1,7 +1,7 @@
 <ion-view view-title="{{vm.stockDetailsData.Name}}">
 
 <ion-nav-buttons side="right">
-	<button class="button icon-left" ng-class="vm.following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="vm.following ? 'Following' : 'Follow'" ng-click="vm.toggleFollow()"></button>
+	<button class="button icon-left" id="followButton" ng-class="vm.following ? 'ion-ios-checkmark-empty' : 'ion-ios-plus'" ng-bind="vm.following ? 'Following' : 'Follow'" ng-click="vm.toggleFollow()"></button>
 </ion-nav-buttons>
 
 <div class="bar bar-subheader">
@@ -112,7 +112,7 @@
 </div>
 
 	<div class="card" >
-	<div class="item item-divider">Notes <span class="icon ion-android-add-circle"  ng-click="vm.addNote()" style="padding-left:5px;"></span></div>
+	<div class="item item-divider">Notes <!-- <span class="icon ion-android-add-circle"  ng-click="vm.addNote()" style="padding-left:5px;"></span> --><button class="button button-raised button-stable ink-balanced" id="noteButton" ng-click="vm.addNote()">Add Note</button></div>
 	<a class="item" ng-repeat="note in vm.stockNotes " ng-click="vm.openNote($index,note)">
 	<h3><span>{{note.title}}</span></h3><span>Added On :{{note.date|date:'d/M/yy'}}</span>
 	<i class="icon ion-ios-arrow-right"></i>

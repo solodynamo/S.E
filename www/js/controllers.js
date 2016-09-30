@@ -109,10 +109,13 @@ angular.module('stocker.controllers', [])
     }
   function getChartData() {
 
+      customService._on();
+
       var promise = chartDataService.getHistoricalData($stateParams.selectedStock, vm.oneYearAgoDate, vm.todayDate);
 
       promise.then(function(data) {
 
+      customService._on();
         $scope.myData = JSON.parse(data)
           .map(function(series) {
             series.values = series.values.map(function(d) { return {x: d[0], y: d[1] }; });
@@ -181,7 +184,7 @@ angular.module('stocker.controllers', [])
     };
 
     vm.addNote = function() {
-      $scope.note = {title:"note", description:"type it pal....!", ticker:vm.selectedStock ,date: vm.todayDate};
+      $scope.note = {title:"Note", description:"Add A Note!", ticker:vm.selectedStock ,date: vm.todayDate};
 
       var note = $ionicPopup.show({
         template: '<textarea type="text" ng-model="note.description"></textarea>',
@@ -189,7 +192,7 @@ angular.module('stocker.controllers', [])
         subTitle:vm.selectedStock,
         scope: $scope,
         buttons: [
-          { text: 'Cancel' },
+          { text: '<b>Cancel<b>' },
           {
             text: '<b>Save</b>',
             type: 'button-positive',
@@ -208,21 +211,18 @@ angular.module('stocker.controllers', [])
   vm.openNote = function(index, noteObj) {
       // $scope.note = {title:title, description:description, ticker:vm.selectedStock ,date: vm.todayDate};
 
-      var note = $ionicPopup.show({
+      $scope.note = $ionicPopup.show({
         template: noteObj.description,
         title: '' ,
         subTitle:noteObj.ticker,
         scope: $scope,
         buttons: [
           { 
-            text: 'Cancel' ,
-            onTap: function()
-            {
-              $ionicPopup.close();
-            } 
+            text: '<b>Cancel</b>' ,
+            type: 'button-dark' 
           },
           { 
-            text: 'Delete',
+            text: '<b>Delete</b>',
             type: 'button-assertive',
             onTap : function() {
               notesService.deleteNote(noteObj.ticker,index);
@@ -231,7 +231,7 @@ angular.module('stocker.controllers', [])
         ]
     });
 
-    note.then(function(res) {
+    $scope.note.then(function(res) {
       vm.stockNotes = notesService.getNotes(vm.selectedStock);
     });
   }
@@ -240,11 +240,13 @@ angular.module('stocker.controllers', [])
 
     vm.newsStories = [];
 
+    customService._on();
+
     var promise = newsService.getNews(vm.selectedStock);
 
     promise.then(function(data) {
       vm.newsStories = data;
-      console.log(vm.newsStories);
+    customService._off();
     })
   }
 
@@ -263,10 +265,11 @@ angular.module('stocker.controllers', [])
     }
 
     var startSearch = ionic.debounce(function(query) {
+      customService._on();
       searchService.search(query)
         .then(function(data) {
           $scope.searchResults = data;
-          console.log("stats",data);
+          customService._off();
         });
     }, 750);
 
