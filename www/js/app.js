@@ -1,6 +1,6 @@
 
 angular.module('stocker', 
-  ['ionic', 'nvd3', 'angular-cache','ngCordova', 'nvChart', 'stocker.controllers','stocker.services','stocker.directives','stocker.filters', 'ngStorage', 'ionic-material'])
+  ['ionic', 'nvd3', 'angular-cache','ngCordova', 'ngStorage', 'nvChart', 'stocker.controllers','stocker.services','stocker.directives','stocker.filters', 'ngStorage', 'ionic-material'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -114,5 +114,20 @@ angular.module('stocker',
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('app/my-stocks');
+  // $urlRouterProvider.otherwise('app/my-stocks');
+  // $urlRouterProvider.otherwise('/login');
+
+  $urlRouterProvider.otherwise(function ($injector, $state, $localStorage) {
+
+       var state = $injector.get('$state');
+       var data = $injector.get('$localStorage');
+
+        if (data.account)  {
+          state.go('app.myStocks');
+        }
+        else {
+         state.go('login'); 
+        }
+
+   });
 });

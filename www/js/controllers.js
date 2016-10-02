@@ -1,7 +1,7 @@
 
 angular.module('stocker.controllers', [])
 
-  .controller('MainCtrl', function($scope, $ionicModal, $timeout, modalService) {
+  .controller('MainCtrl', function($scope, $ionicModal, $timeout, modalService, $ionicLoading, $ionicHistory,  $state, $localStorage) {
 
     var vm= this;
     vm.loginData = {};
@@ -25,6 +25,21 @@ angular.module('stocker.controllers', [])
     vm.doLogin = function() {
 
     }
+    $scope.logout = function() {
+
+    $ionicLoading.show({template:'Logging out....'});
+   
+    $localStorage.$reset();
+
+    $timeout(function () {
+        $ionicLoading.hide();
+        $ionicHistory.clearCache();
+        $ionicHistory.clearHistory();
+        $ionicHistory.nextViewOptions({ disableBack: true, historyRoot: true });
+        $state.go('login');
+        }, 30);
+
+    };
 
   
 })
@@ -64,11 +79,6 @@ angular.module('stocker.controllers', [])
      vm.chartViewFunc = function(n) {
        $scope.chartView = n;
      }
-
-    // $scope.$watch("vm.selectedChart",function(newVal,oldVal)
-    // {
-    //   console.log("tyekjl");
-    // });
 
     vm.openNews= function(link) {
       var inAppBrowserOptions= {
@@ -209,7 +219,6 @@ angular.module('stocker.controllers', [])
   }
 
   vm.openNote = function(index, noteObj) {
-      // $scope.note = {title:title, description:description, ticker:vm.selectedStock ,date: vm.todayDate};
 
       $scope.note = $ionicPopup.show({
         template: noteObj.description,
@@ -283,16 +292,18 @@ angular.module('stocker.controllers', [])
   function($scope, modalService, Utils, Popup, $ionicModal, $state, $localStorage) {
 
      $scope.login = function(user) {
-    if (angular.isDefined(user)) {
-      Utils.show();
-      loginWithFirebase(user.email, user.password);
-    }
-  };
+       if (angular.isDefined(user)) {
+        Utils.show();
+        loginWithFirebase(user.email, user.password);
+       }
+    };
 
-  $scope.closeModal= function()
+  $scope.goToSignUp= function()
   {
-    modalService.closeModal();
+    modalService.openModal(3);
   }
+
+  
 
 var loginWithFirebase = function(email, password) {
     firebase.auth().signInWithEmailAndPassword(email, password)
@@ -389,6 +400,7 @@ var loginWithFirebase = function(email, password) {
                 $localStorage.loginProvider = "Firebase";
                 $localStorage.email = user.email;
                 $localStorage.password = user.password;
+                 modalService.closeModal();
               });
             })
             .catch(function(error) {
